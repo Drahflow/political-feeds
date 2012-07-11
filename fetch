@@ -1,0 +1,68 @@
+#!/bin/sh
+
+fetchRSS 'http://www.bundesrat.de/cln_117/nn_6898/SiteGlobals/Functions/RSSFeed/RSSGenerator__PBPrintout.xml' 'ds' 'bundesrat' &
+fetchRSS 'http://www.bundestag.de/dip21rss/bundestag_drucksachen.rss' 'ds' 'bundestag' &
+fetchRSS 'http://www.europarl.europa.eu/rss/doc/mixed-6661/de.xml' 'ds' 'eu-parliament' &
+
+fetchRSS 'http://www.bundestag.de/rss_feeds/plenarprotokolle.rss' 'protocol' 'bundestag' &
+fetchRSS 'http://www.europarl.europa.eu/rss/doc/mixed-6662/de.xml' 'protocol' 'eu-parliament' &
+fetchRSS 'http://ec.europa.eu/yourvoice/consultations/index_de.rss' 'action' 'eu-commission' &
+
+# can activate if want
+# fetchRSS 'http://www.auswaertiges-amt.de/sid_8243760166DE5D7A794F8AC8E4236D39/DE/RSS_Aktuelle_Artikel.xml' 'pr' 'ministerium' &
+# fetchRSS 'http://www.auswaertiges-amt.de/sid_8243760166DE5D7A794F8AC8E4236D39/SiteGlobals/Functions/RSSFeed/DE/RSSNewsfeed/RSS_Pressemitteilungen_Reden.xml' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmas.de/SiteGlobals/Functions/RSSFeed/DE/RSSNewsfeed/RSSNewsfeed.xml' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmbf.de/rss/ausschreibungen.xml' 'info' 'ministerium' &
+# fetchRSS 'http://www.bmbf.de/rss/bekanntmachungen.xml' 'info' 'ministerium' &
+# fetchRSS 'http://www.bmbf.de/rss/broschueren.xml' 'info' 'ministerium' &
+# fetchRSS 'http://www.bmbf.de/rss/de/press.xml' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmbf.de/rss/interviews.xml' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmbf.de/rss/reden.xml' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmelv.de/SiteGlobals/Functions/RSSFeed/RSSNewsfeed/RSSNewsfeed_Pressemitteilungen.xml' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmfsfj.de/BMFSFJ/Service/RSS/rssfeed,did=154496.html' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmi.bund.de/SiteGlobals/Functions/RSSFeed/RSSNewsfeed/RSSNewsfeed_Pressemitteilungen.xml' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmi.bund.de/SiteGlobals/Functions/RSSFeed/RSSNewsfeed/RSSNewsfeed_Reden.xml' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmj.de/SiteGlobals/Functions/RSSFeed/DE/RSSNewsfeed/RSSNewsfeed.xml' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmu.de/allgemein/rss/35401.rss' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmvbs.de/SiteGlobals/Functions/RSSFeed/DE/Pressemitteilungen/RSSFeed_Pressemitteilungen.xml' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmvbs.de/SiteGlobals/Functions/RSSFeed/DE/Termine/RSSFeed_Termine.xml' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmvg.de/portal/a/bmvg/rss' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmvg.de/portal/a/bmvg/rss/artikel' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmvg.de/portal/a/bmvg/rss/pressemitteilungen' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmwi.de/BMWi/Navigation/Service/Rss/ausschreibungen.html' 'info' 'ministerium' &
+# fetchRSS 'http://www.bmwi.de/BMWi/Navigation/Service/Rss/bmwi.html' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmwi.de/BMWi/Navigation/Service/Rss/pressemitteilungen.html' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmwi.de/BMWi/Navigation/Service/Rss/reden.html' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmwi.de/BMWi/Navigation/Service/Rss/rss-ausbildung-und-beruf.html' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmwi.de/BMWi/Navigation/Service/Rss/rss-aussenwirtschaft.html' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmwi.de/BMWi/Navigation/Service/Rss/rss-energie.html' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmwi.de/BMWi/Navigation/Service/Rss/rss-europa.html' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmwi.de/BMWi/Navigation/Service/Rss/rss-mittelstand.html' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmwi.de/BMWi/Navigation/Service/Rss/rss-technologie.html' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmwi.de/BMWi/Navigation/Service/Rss/rss-tourismus.html' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmwi.de/BMWi/Navigation/Service/Rss/rss-vorne.html' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bmz.de/includes/rss/rss_de.rss' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bundesfinanzministerium.de/DE/BMF__Startseite/RSS.xml' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bundesgesundheitsministerium.de/ausschreibungen.xml' 'info' 'ministerium' &
+# fetchRSS 'http://www.bundesgesundheitsministerium.de/pressemitteilungen.xml' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bundesgesundheitsministerium.de/rss.xml' 'pr' 'ministerium' &
+# fetchRSS 'http://www.bundeskanzlerin.de/SiteGlobals/Functions/Webs/BK/RSSFeed/rssMeldungenAbo.xml?nn=386444' 'pr' 'bundesregierung' &
+# fetchRSS 'http://www.bundeskanzlerin.de/SiteGlobals/Functions/Webs/BK/RSSFeed/rssRedenAbo.xml?nn=386444' 'pr' 'bundesregierung' &
+# fetchRSS 'http://www.bundesrat.de/cln_117/nn_6898/SiteGlobals/Functions/RSSFeed/RSSGenerator__Announcement.xml' 'pr' 'bundesrat' &
+# fetchRSS 'http://www.bundesrat.de/cln_117/nn_6898/SiteGlobals/Functions/RSSFeed/RSSGenerator__PressRelease.xml' 'pr' 'bundesrat' &
+# fetchRSS 'http://www.bundesregierung.de/SiteGlobals/Functions/RSSFeed/DE/RSSNewsfeed/RSS_Breg_artikel/RSSNewsfeed.xml?nn=392282' 'pr' 'bundesregierung' &
+# fetchRSS 'http://www.bundesregierung.de/SiteGlobals/Functions/RSSFeed/DE/RSSNewsfeed/RSS_Breg_pressemitteilungen/RSSNewsfeed.xml?nn=392282' 'pr' 'bundesregierung' &
+# fetchRSS 'http://www.bundestag.de/service/rss/Bundestag_Aktuelle_Themen.rss' 'pr' 'bundestag' &
+# fetchRSS 'http://www.bundestag.de/service/rss/Bundestag_HiB.rss' 'pr' 'bundestag' &
+# fetchRSS 'http://www.bundestag.de/service/rss/Bundestag_TOAusschuesse.rss' 'to' 'bundestag' &
+# fetchRSS 'http://www.bundestag.de/service/rss/Bundestag_WD.rss' 'info' 'bundestag' &
+# fetchRSS 'http://www.eurallfree.org/?q=de/rss.xml' 'pr' 'eu-parliament' &
+# fetchRSS 'https://www.bsi.bund.de/SiteGlobals/Functions/RSSFeed/RSSNewsfeed/RSSNewsfeed.xml' 'pr' 'ministerium' &
+# fetchRSS 'https://www.bsi.bund.de/SiteGlobals/Functions/RSSFeed/RSSNewsfeed/RSSNewsfeed_Ausschreibungen.xml' 'info' 'ministerium' &
+
+# will not be useful
+# fetchRSS 'http://www.auswaertiges-amt.de/sid_8243760166DE5D7A794F8AC8E4236D39/DE/Infoservice/RSS/RSS_Aktuelle_Stellenangebote.xml' 'info' 'ministerium' &
+# fetchRSS 'http://www.bmbf.de/rss/videos.xml' 'pr' 'ministerium' &
+# fetchRSS 'https://www.bsi.bund.de/SiteGlobals/Functions/RSSFeed/RSSNewsfeed/RSSNewsfeed_Jobs.xml' 'pr' 'ministerium' &
+
+wait

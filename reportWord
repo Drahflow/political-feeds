@@ -1,0 +1,185 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use encoding 'utf-8';
+
+use XML::Simple;
+use Data::Dumper;
+use Digest::SHA qw(sha512_hex);
+use Date::Format;
+
+my $now = time;
+my $data = "data";
+my $today = "$data/" . time2str('%Y-%m-%d', $now);
+my $yesterday = "$data/" . time2str('%Y-%m-%d', $now - 86400);
+
+my $word = $ARGV[0];
+
+my %existing;
+
+mkdir "$today/report" unless -d "$today/report";
+
+my @docs = glob "$today/*";
+my %yesterdayDocs = map { $_ =~ s/$yesterday/$today/; ($_, 1) } glob "$yesterday/*";
+
+my $i = 0;
+
+my %blacklists = (
+  'Internet' => [
+    qr(Beiträge\s+werden\s+im\s+Internet\s+veröffentlicht),
+    qr(will\s+be\s+published\s+on\s+the\s+Internet),
+    qr(may\s+be\s+published\s+on\s+the\s+Internet),
+    qr(Ausdruck\s+aus\s+dem\s+Internet-Angebot\s+des\s+Deutschen\s+Bundestages),
+    qr(Ausführliche\s+Informationen\s+finden\s+Sie\s+auf\s+den\s+Internetseiten),
+  ],
+);
+
+my @report;
+foreach my $doc (@docs) {
+  next if $yesterdayDocs{$doc};
+
+  ++$i;
+  # print "Handling $i / " . scalar(@docs) . "\n";
+
+  next if $doc =~ /\.meta$/;
+  next if -d $doc;
+
+  my @hit;
+  my @start;
+
+  open DOC, '<', $doc or die "cannot open $doc: $!";
+  while(my $line = <DOC>) {
+    if(@start < 10) {
+      push @start, removeHTML($line);
+    }
+
+    if($line =~ /(.{0,100}$word.{0,100})/) {
+      my $hit = removeHTML($1);
+
+      if(exists $blacklists{$word}) {
+        next if grep { $hit =~ /$_/i } @{$blacklists{$word}};
+      }
+
+      push @hit, $hit;
+      ++$existing{$hit};
+    }
+  }
+  close DOC;
+  
+  if(@hit) {
+    open META, '<', "$doc.meta";
+    my $meta = XMLin(join '', <META>);
+    close META;
+
+    push @report, {
+      'url' => $meta->{'url'},
+      'title' => $meta->{'url'},
+      'type' => $meta->{'type'},
+      'hits' => \@hit,
+      'starts' => \@start,
+    };
+
+    #print "  hit\n";
+  }
+}
+
+my $hits = 0;
+
+open REPORT, '>:utf8', "$today/report/$word.html" or die "cannot open $today/report/$word.html";
+print REPORT <<"HTML";
+<html><head>
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+<title>Report on $word</title>
+<style type="text/css">
+h1 {
+  font-size: 16px;
+  font-weight: bold;
+}
+h2 {
+  font-size: 14px;
+  font-weight: bold;
+}
+p.start {
+  font-size: 12px;
+  font-weight: bold;
+}
+p.hit {
+  font-size: 12px;
+  font-weight: normal;
+}
+div.column {
+  width: 300px;
+  border-right: 1px solid black;
+  padding-left: 10px;
+  padding-right: 10px;
+  float: left;
+  -ms-word-break: break-all;
+  word-break: break-all;
+
+  // Non standard for webkit
+  word-break: break-word;
+
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto;
+}
+</style>
+</head><body>
+HTML
+
+createColumn('Handlungsmöglichkeiten', 'action');
+createColumn('Drucksachen', 'ds');
+createColumn('Protokolle', 'protocol');
+
+sub createColumn {
+  my ($header, $type) = @_;
+
+  print REPORT '<div class="column">';
+  print REPORT '<h1>' . $header . '</h1>';
+
+  foreach my $doc (sort { @{$b->{'hits'}} <=> @{$a->{'hits'}} } grep { $_->{'type'} eq $type } @report) {
+    my @hits = grep { $existing{$_} < 5 } @{$doc->{'hits'}};
+    next unless @hits;
+
+    my $start = join "\n", map { "$_" } @{$doc->{'starts'}};
+    if(length $start > 200) {
+      $start = substr($start, 0, 200) . '...';
+    }
+
+    print REPORT '<div>';
+    print REPORT '<h2><a href="' . $doc->{'url'} . '">' . $doc->{'url'} . '</a></h2>';
+    print REPORT '<p class="start">' . $start . '</p>';
+    print REPORT '<p class="hit">' . (join "[...]", map { $_ } @hits) . '</p>';
+    print REPORT '</div>';
+
+    ++$hits;
+  }
+
+  print REPORT '</div>';
+}
+print REPORT <<"HTML";
+</body></html>
+HTML
+close REPORT;
+
+print "$hits / " . scalar(@docs) . " hit\n";
+
+sub removeHTML {
+  my ($str) = @_;
+
+  $str =~ s/<.*?>//g;
+  $str =~ s/&auml;/ä/g;
+  $str =~ s/&ouml;/ö/g;
+  $str =~ s/&uuml;/ü/g;
+  $str =~ s/&Auml;/Ä/g;
+  $str =~ s/&Ouml;/Ö/g;
+  $str =~ s/&Uuml;/Ü/g;
+  $str =~ s/&szlig;/ß/g;
+  $str =~ s/&/&amp;/g;
+  $str =~ s/</&lt;/g;
+  $str =~ s/>/&gt;/g;
+
+  return $str;
+}
