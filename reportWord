@@ -38,8 +38,6 @@ my %blacklists = (
 
 my @report;
 foreach my $doc (@docs) {
-  next if $yesterdayDocs{$doc};
-
   ++$i;
   # print "Handling $i / " . scalar(@docs) . "\n";
 
@@ -79,6 +77,7 @@ foreach my $doc (@docs) {
       'type' => $meta->{'type'},
       'hits' => \@hit,
       'starts' => \@start,
+      'old' => ($yesterdayDocs{$doc}? 1: 0),
     };
 
     #print "  hit\n";
@@ -139,7 +138,7 @@ sub createColumn {
   print REPORT '<div class="column">';
   print REPORT '<h1>' . $header . '</h1>';
 
-  foreach my $doc (sort { @{$b->{'hits'}} <=> @{$a->{'hits'}} } grep { $_->{'type'} eq $type } @report) {
+  foreach my $doc (sort { $b->{'old'} <=> $a->{'old'} } sort { @{$b->{'hits'}} <=> @{$a->{'hits'}} } grep { $_->{'type'} eq $type } @report) {
     my @hits = grep { $existing{$_} < 5 } @{$doc->{'hits'}};
     next unless @hits;
 
