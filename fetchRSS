@@ -78,7 +78,7 @@ sub grabDocuments {
     grabDocuments($_, $meta) foreach @$data;
   } elsif(ref $data eq 'HASH') {
     grabDocuments($_, $meta) foreach values %$data;
-  } elsif($data =~ m!^http://!) {
+  } elsif($data =~ m!^https?://!) {
     $documents{$data} = {
       'url' => $data,
       %$meta,
