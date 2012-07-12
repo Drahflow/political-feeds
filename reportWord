@@ -89,6 +89,17 @@ foreach my $doc (@docs) {
 
 my $hits = 0;
 
+open RSS, '>:utf8', "$today/report/$word.rss" or die "cannot open $today/report/$word.rss";
+print RSS <<"RSS";
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+<atom:link href="http://drahflow.name/report/$word.rss" rel="self" type="application/rss+xml" />
+<title>Report on $word</title>
+<link>http://drahflow.name/report/$word.html</link>
+<description>A daily extraction of mentions of "$word" in politics.</description>
+RSS
+
 open REPORT, '>:utf8', "$today/report/$word.html" or die "cannot open $today/report/$word.html";
 print REPORT <<"HTML";
 <html><head>
@@ -151,10 +162,18 @@ sub createColumn {
     }
 
     print REPORT '<div>';
-    print REPORT '<h2><a href="' . $doc->{'url'} . '">' . $doc->{'url'} . '</a></h2>';
-    print REPORT '<p class="start">' . $start . '</p>';
-    print REPORT '<p class="hit">' . (join "[...]", map { $_ } @hits) . '</p>';
+    print REPORT '<h2><a href="' . encodeXML($doc->{'url'}) . '">' . encodeXML($doc->{'url'}) . '</a></h2>';
+    print REPORT '<p class="start">' . encodeXML($start) . '</p>';
+    print REPORT '<p class="hit">' . encodeXML(join "[...]", map { $_ } @hits) . '</p>';
     print REPORT '</div>';
+
+    print RSS '<item>' . "\n";
+    print RSS '<link>' . encodeXML($doc->{'url'}) . '</link>' . "\n";
+    if($start !~ /^\s+$/) {
+      print RSS '<title>' . encodeXML($start) . '</title>' . "\n";
+    }
+    print RSS '<description>' . encodeXML(encodeXML(join "[...]", map { $_ } @hits)) . '</description>' . "\n";
+    print RSS '</item>' . "\n";
 
     ++$hits;
   }
@@ -165,6 +184,12 @@ print REPORT <<"HTML";
 </body></html>
 HTML
 close REPORT;
+
+print RSS <<"RSS";
+</channel>
+</rss>
+RSS
+close RSS;
 
 print "$hits / " . scalar(@docs) . " hit\n";
 
@@ -179,9 +204,20 @@ sub removeHTML {
   $str =~ s/&Ouml;/Ö/g;
   $str =~ s/&Uuml;/Ü/g;
   $str =~ s/&szlig;/ß/g;
+
+  $str =~ tr/\000-\037//d;
+
+  return $str;
+}
+
+sub encodeXML {
+  my ($str) = @_;
+
   $str =~ s/&/&amp;/g;
   $str =~ s/</&lt;/g;
   $str =~ s/>/&gt;/g;
+  $str =~ s/"/&quot;/g;
+  $str =~ s/'/&apos;/g;
 
   return $str;
 }
