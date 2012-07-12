@@ -9,12 +9,15 @@ use XML::Simple;
 use Data::Dumper;
 use Digest::SHA qw(sha512_hex);
 use Date::Format;
+use Encode qw(decode);
+use I18N::Langinfo qw(langinfo CODESET);
 
 my $now = time;
 my $data = "data";
 my $today = "$data/" . time2str('%Y-%m-%d', $now);
 my $yesterday = "$data/" . time2str('%Y-%m-%d', $now - 86400);
 
+@ARGV = map { decode 'UTF-8', $_ } @ARGV;
 my $word = $ARGV[0];
 
 my %existing;
@@ -47,7 +50,7 @@ foreach my $doc (@docs) {
   my @hit;
   my @start;
 
-  open DOC, '<', $doc or die "cannot open $doc: $!";
+  open DOC, '<:utf8', $doc or die "cannot open $doc: $!";
   while(my $line = <DOC>) {
     if(@start < 10) {
       push @start, removeHTML($line);
