@@ -1,7 +1,0 @@
-#!/bin/sh
-
-reportWord 'Internet' &
-reportWord 'Telekommunikationsüberwachung' &
-reportWord 'Überwachung' &
-
-wait
