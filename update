@@ -1,0 +1,18 @@
+#!/bin/sh
+
+cd /opt/political-feed/
+
+PATH="/opt/political-feed/:$PATH"
+
+fetch
+
+today="$(date +'%Y-%m-%d')"
+for word in Internet Telekommunikationsüberwachung TKÜ Überwachung Funkzellenabfrage Vorratsdatenspeicherung; do
+	reportWord "$word"
+
+	for fmt in html rss; do
+		cp "data/$today/report/$word.$fmt" "/var/www/report/$today-$word.$fmt"
+		chmod o+r "/var/www/report/$today-$word.$fmt"
+		ln -sf "/var/www/report/$today-$word.$fmt" "/var/www/report/$word.$fmt"
+	done
+done
