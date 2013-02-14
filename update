@@ -7,7 +7,7 @@ PATH="/opt/political-feed/:$PATH"
 fetch
 
 today="$(date +'%Y-%m-%d')"
-for word in Internet Telekommunikationsüberwachung TKÜ Überwachung Funkzellenabfrage Vorratsdatenspeicherung; do
+for word in Internet Telekommunikationsüberwachung TKÜ Überwachung Funkzellenabfrage Vorratsdatenspeicherung Bestandsdatenauskunft PNR Fluggastdaten TKG Telekommunikationsgesetz "Open Data" Transparenzgesetz Informationsfreiheitsgesetz Urheberrecht Netzpolitik Datenschutzgrundverordnung Beschäftigtendatenschutz Videoüberwachung Drohnen Terrorismus Netzneutralität Familienpolitik Zwangseinweisung "psychologische Begutachtung" Tierschutz Massentransporte Justizpolitik Hoheitsrechte Richter Staatsanwälte Staatsanwalt Vetternwirtschaft Lobby; do
 	reportWord "$word"
 
 	for fmt in html rss; do
