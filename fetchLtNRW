@@ -1,0 +1,83 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use XML::Simple;
+use HTTP::Tiny;
+use Data::Dumper;
+use Digest::SHA qw(sha512_hex);
+use Date::Format;
+
+my $url = $ARGV[0];
+my $type = $ARGV[1];
+
+my $http = HTTP::Tiny->new;
+my $now = time;
+my $data = "data";
+my $today = "$data/" . time2str('%Y-%m-%d', $now);
+my $yesterday = "$data/" . time2str('%Y-%m-%d', $now - 86400);
+
+mkdir $today if(not -d $today);
+
+my %documents;
+
+foreach my $i (map { $_ * 20 + 1 } 0 .. 10) {
+  $url =~ s/m=\d+/m=$i/;
+
+  fetch($url, { 'type' => $type });
+}
+
+foreach my $doc (values %documents) {
+  print "Handling " . $doc->{'url'} . "...\n";
+
+  my $sha = sha512_hex($doc->{'url'});
+
+  if(-r "$today/$sha") {
+    print "  exists\n";
+    next;
+  } elsif(-r "$yesterday/$sha") {
+    system("ln -v $yesterday/$sha $today/$sha");
+    system("ln -v $yesterday/$sha.meta $today/$sha.meta");
+  } else {
+    my $content = $http->get($doc->{'url'});
+
+    open CONTENT, '>', "$today/$sha" or die "cannot open $today/$sha: $!";
+    print CONTENT $content->{'content'};
+    close CONTENT;
+    open META, '>', "$today/$sha.meta" or die "cannot open $today/$sha.meta: $!";
+    print META XMLout({
+        'url' => $doc->{'url'},
+        'type' => $doc->{'type'},
+    });
+    close META;
+
+    system("file $today/$sha | grep PDF && pdftotext $today/$sha && mv -v $today/$sha.txt $today/$sha");
+
+    print "  fetched\n";
+    sleep 1;
+  }
+}
+
+sub fetch {
+  my ($url, $meta) = @_;
+
+  print "$url\n";
+
+  $url =~ m!(^http://[^/]+)! or die "cannot extract host from URL";
+  my $host = $1;
+
+  my $response = $http->get($url);
+  print $response->{'status'} . " " . $response->{'reason'} . "\n";
+
+  my $data = $response->{'content'};
+
+                        
+  while($data =~ m!<a[^>]* href="/(portal/WWW/dokumentenarchiv/Dokument\?Id=MMD.{4,10}&amp;quelle=alle)"[^>]*>([^<]+)</a>(.*)!s) {
+    $data = $3;
+    $documents{$1} = {
+      'url' => "$host/$1",
+      %$meta,
+    };
+  }
+}

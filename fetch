@@ -5,6 +5,8 @@ fetchRSS 'http://www.bundestag.de/dip21rss/bundestag_drucksachen.rss' 'ds' 'bund
 fetchRSS 'http://www.europarl.europa.eu/rss/doc/mixed-6661/de.xml' 'ds' 'eu-parliament' &
 fetchRSS 'http://www.landtag-niedersachsen.de/rss/drucksachen.xml' 'ds' 'landtag-niedersachsen' &
 
+fetchLtNRW 'http://www.landtag.nrw.de/portal/WWW/Webmaster/GB_I/I.1/aktuelle_drucksachen/aktuelle_Dokumente.jsp?wp=14&docTyp=ALLE&m=200' 'ds' 'landtag-nrw' &
+
 fetchRSS 'http://www.bundestag.de/rss_feeds/plenarprotokolle.rss' 'protocol' 'bundestag' &
 fetchRSS 'http://www.europarl.europa.eu/rss/doc/mixed-6662/de.xml' 'protocol' 'eu-parliament' &
 fetchRSS 'http://www.landtag-niedersachsen.de/rss/stenoberichte.xml' 'protocol' 'landtag-niedersachsen' &
