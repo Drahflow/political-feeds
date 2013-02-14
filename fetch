@@ -3,15 +3,18 @@
 fetchRSS 'http://www.bundesrat.de/cln_117/nn_6898/SiteGlobals/Functions/RSSFeed/RSSGenerator__PBPrintout.xml' 'ds' 'bundesrat' &
 fetchRSS 'http://www.bundestag.de/dip21rss/bundestag_drucksachen.rss' 'ds' 'bundestag' &
 fetchRSS 'http://www.europarl.europa.eu/rss/doc/mixed-6661/de.xml' 'ds' 'eu-parliament' &
-fetchRSS 'http://www.landtag-niedersachsen.de/rss/drucksachen.xml' 'ds' 'landtag-niedersachsen' &
+fetchRSS 'http://www.landtag-niedersachsen.de/rss/drucksachen.xml' 'ds' 'landtag-ni' &
 
 fetchLtNRW 'http://www.landtag.nrw.de/portal/WWW/Webmaster/GB_I/I.1/aktuelle_drucksachen/aktuelle_Dokumente.jsp?wp=14&docTyp=ALLE&m=200' 'ds' 'landtag-nrw' &
 
 fetchRSS 'http://www.bundestag.de/rss_feeds/plenarprotokolle.rss' 'protocol' 'bundestag' &
 fetchRSS 'http://www.europarl.europa.eu/rss/doc/mixed-6662/de.xml' 'protocol' 'eu-parliament' &
-fetchRSS 'http://www.landtag-niedersachsen.de/rss/stenoberichte.xml' 'protocol' 'landtag-niedersachsen' &
+fetchRSS 'http://www.landtag-niedersachsen.de/rss/stenoberichte.xml' 'protocol' 'landtag-ni' &
 fetchRSS 'http://ec.europa.eu/yourvoice/consultations/index_de.rss' 'action' 'eu-commission' &
 fetchRSS 'https://epetitionen.bundestag.de/index.php?action=petition;sa=rss;type=rss2' 'action' 'bundestag' &
+
+fetchRSS 'http://lissh.lvn.ltsh.de/shlt/rss/aborss002.xml' 'ds' 'landtag-sh' &
+fetchRSS 'http://lissh.lvn.ltsh.de/shlt/rss/aborss004.xml' 'protocol' 'landtag-sh' &
 
 # can activate if want
 # fetchRSS 'http://www.auswaertiges-amt.de/sid_8243760166DE5D7A794F8AC8E4236D39/DE/RSS_Aktuelle_Artikel.xml' 'pr' 'ministerium' &
